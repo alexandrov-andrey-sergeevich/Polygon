@@ -45,7 +45,6 @@ class StoreBatchStrategies(Strategies):
                 items.append(item)
             except Exception as e:
                 logger.warning(f"Ошибка получения из буфера: {e}", exc_info=True)
-                raise
 
         return items
 
@@ -59,7 +58,6 @@ class StoreBatchStrategies(Strategies):
                 yield from buffer.put_item(item, **kwargs)
             except Exception as e:
                 logger.warning(f"Ошибка помещения в буфер: {e}", exc_info=True)
-                raise
 
 
 class ContainerBatchStrategies(Strategies):
@@ -81,7 +79,6 @@ class ContainerBatchStrategies(Strategies):
             return count  # Возвращаем полученное количество
         except Exception as e:
             logger.warning(f"Ошибка получения из буфера: {e}", exc_info=True)
-            raise
 
     def put_buffer_items(self, buffer: BufferContainer, quantity: int | float = 1, **kwargs):
         """Поместить количество в Container"""
@@ -96,4 +93,3 @@ class ContainerBatchStrategies(Strategies):
             yield from buffer.put_item(quantity, **kwargs)
         except Exception as e:
             logger.warning(f"Ошибка помещения в буфер: {e}", exc_info=True)
-            raise

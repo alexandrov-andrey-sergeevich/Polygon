@@ -9,6 +9,15 @@ class BaseDataConfig(BaseModel):
     metadata: Optional[Dict[str, Any]] = Field(default_factory=dict, description="Остальные данные")
 
 
+class ProcessConfig(BaseDataConfig):
+    timeout: int | float = Field(..., description="Задержка имитирующая работу с объектом")
+    strategies: Any = Field(description="Стратегия взаимодействия с объектами") # <- Исправь типизацию
+
+
+class StrategiesConfig(BaseDataConfig):
+    ...
+
+
 class BufferConfig(BaseDataConfig):
     capacity: Optional[int | float] = Field(default=None, gt=0, description="Емкость буфера")
     init: Optional[int | float] = Field(default=0, ge=0, description="Начальный уровень заполнения (для типа Container)")
