@@ -1,12 +1,15 @@
 import logging
+from typing import Generator, Union, List
 import simpy
+from .part import Part
+from ..utils.validators import ProcessConfig
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
 class Process:
-    def __init__(self, env: simpy.Environment, process_config):
+    def __init__(self, env: simpy.Environment, process_config: ProcessConfig):
         # Передаем окружение и настройки процесса
         self.env = env
         self.process_config = process_config
@@ -18,7 +21,8 @@ class Process:
         # Создаем ресурс процесса
         self.resource = simpy.Resource(self.env, self.process_config.capacity)
 
-    def get_active_process(self):
+    def get_active_process(self) -> Generator[simpy.Event, Union[List[Part], Union[int, float]],
+    Union[List[Part], Union[int, float]]]:
         while True:
             try:
                 # Берем детали из входного буфера
@@ -43,7 +47,7 @@ class Process:
 
         # Имитируем время работы с объектом
         if self.process_config.timeout:
-            yield self.env.timeout(self.process_config.timeout)  # Исправлено: добавлен yield
+            yield self.env.timeout(self.process_config.timeout)
 
         logger.info(f"Время: {self.env.now}, конец обработки в процессе {self.process_config.name}")
 

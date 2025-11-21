@@ -1,5 +1,5 @@
 import logging
-from typing import List, Any, Generator, Union
+from typing import List, Any, Generator, Union, Optional
 from abc import ABC, abstractmethod
 import simpy
 from ..utils.validators import BufferConfig
@@ -25,11 +25,11 @@ class Buffer(ABC):
         """Текущее количество объектов в буфере"""
         raise NotImplementedError
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"{self.__class__.__name__}()"
 
-    def __str__(self):
-        return self.__class__.__name__
+    def __str__(self) -> str:
+        return f"{self.__class__.__name__}"
 
 
 class BufferStore(Buffer):
@@ -40,11 +40,15 @@ class BufferStore(Buffer):
 
         # Определяем тип буфера
         capacity = buffer_config.capacity if buffer_config.capacity is not None else simpy.core.Infinity
-        self.buffer = simpy.Store(self.env, capacity=capacity)
+        self.buffer = simpy.FilterStore(self.env, capacity=capacity)
 
-    def get_item(self, **kwargs) -> Generator[simpy.Event, Part, Part]:
+    def get_item(self, filter_item: Optional[Any] = None, **kwargs) -> Generator[simpy.Event, Part, Part]:
         """Получаем объект из буфера"""
-        item: Part = yield self.buffer.get()
+        if filter_item:
+            item: Part = yield self.buffer.get(filter=filter_item)
+        else:
+            item: Part = yield self.buffer.get()
+
         logger.info(f"Время: {self.env.now}, объект: {item.part_config.name} получена из "
                     f"буфера: {self.buffer_config.name}")
         return item

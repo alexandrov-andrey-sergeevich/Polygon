@@ -1,6 +1,6 @@
 [project]
 name = "Polygon"
-version = "0.0.4a"
+version = "0.0.5a"
 authors = "Alexandrov Andrey Sergeevich"
 description = "Add your description here"
 requires-python = ">=3.13"
