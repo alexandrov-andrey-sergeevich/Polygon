@@ -1,36 +1,26 @@
 from typing import Any, Dict
 from uuid import UUID, uuid4
-from pydantic import BaseModel, Field
-from pydantic.config import ConfigDict
-from constants import PRIORITY_MEDIUM
+from pydantic import BaseModel, Field, ConfigDict
 
 
-class BaseDataConfig(BaseModel):
-    """
-    Базовый класс для всех конфигураций.
-    """
+class BaseConfig(BaseModel):
     id: UUID = Field(
         default_factory=uuid4,
-        description="Уникальный идентификатор объекта."
+        description="ID объекта симуляции"
     )
     name: str = Field(
         ...,
         min_length=3,
         max_length=100,
-        description="Имя объекта."
-    )
-    priority: int = Field(
-        default=PRIORITY_MEDIUM,
-        ge=0,
-        description="Приоритет объекта."
+        description="Имя объекта симуляции"
     )
     metadata: Dict[str, Any] = Field(
         default_factory=dict,
-        description="Дополнительные метаданные."
+        description="Метаданные объекта симуляции"
     )
 
     model_config = ConfigDict(
-        frozen=True, # Делаем конфигурацию иммутабельной
-        validate_assignment=True, # Валидируем в случае изменения при frozen=False
-        extra="forbid", # Запрещает не объявленные поля
+        frozen=True,  # Делаем конфигурацию иммутабельной
+        extra="forbid",  # Запрещает не объявленные поля
+        str_strip_whitespace=True, # Убираем лишние пробелы по краям строк
     )
