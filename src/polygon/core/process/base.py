@@ -1,64 +1,47 @@
 from abc import ABC, abstractmethod
-from typing import Generator
+from typing import TypeVar, Generic
+
 import simpy
 
+from src.polygon.models.process import BaseProcessConfig
+from src.polygon.core.context import SimulationContext
 
-class BaseProcess(ABC):
-    def __init__(
-            self,
-            env: simpy.Environment,
-            timeout: float = 0.0,
-            capacity: int = 1
-    ) -> None:
-        self.env = env
-        self.timeout = timeout
-        self._capacity = capacity
+TConfig = TypeVar('TConfig', bound=BaseProcessConfig)
 
-        # Инициализация ресурса процесса
-        self._resource = simpy.Resource(self.env, self._capacity)
+
+class BaseProcess(ABC, Generic[TConfig]):
+    """Абстрактный базовый класс процесса"""
+
+    def __init__(self, config: TConfig, context: SimulationContext) -> None:
+        self.config = config
+        self.context = context
+        self.env = context.env
+
+        # Ресурс процесса (ограничение параллельных выполнений)
+        self._resource = simpy.Resource(self.env, capacity=config.capacity)
         self._running = True
 
-    def run(self) -> Generator[simpy.Event, None, None]:
-        """
-        Точка входа запускает основной цикл процесса
+        # Регистрируем процесс в контексте
+        context.register_component(config.id, self)
 
-        Сбрасывает флаг _running = True и делегирует выполнение working().
-        Может вызываться многократно для "перезапуска" процесса
+    def run(self) -> simpy.Process:
+        """
+        Точка входа, запускает основной цикл процесса.
         """
         self._running = True
-        yield from self.working()
+        return self.working()
 
     @abstractmethod
-    def working(self) -> Generator[simpy.Event, None, None]:
+    def working(self) -> simpy.Process:
         """
-        Основной цикл процесса
-
-        Должен быть реализован в наследнике. Определяет логику обработки:
-            - захват ресурса
-            - обработка (timeout)
-            - взаимодействие с входным(-ми)/выходным(-ми) буферами
+        Основной цикл процесса (должен быть реализован в наследнике).
         """
         ...
 
     def stop(self) -> None:
-        """
-        Остановка процесса
-
-        Устанавливает флаг _running = False. Процесс завершает текущий цикл
-        и остановится на следующей проверке while self._running
-        """
+        """Остановка процесса."""
         self._running = False
 
     @property
     def is_running(self) -> bool:
-        """
-        Проверка состояния процесса
-
-        :return: True - если процесс активен; False, если остановлен
-        """
         return self._running
-
-    @property
-    def capacity(self) -> int:
-        """Емкость ресурса (кол-во параллельных процессов)"""
-        return self._capacity

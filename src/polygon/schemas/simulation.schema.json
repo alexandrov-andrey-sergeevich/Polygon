@@ -1,0 +1,773 @@
+{
+  "$defs": {
+    "AssemblyProcessConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "description": "ID объекта симуляции",
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "description": "Имя объекта симуляции",
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "metadata": {
+          "additionalProperties": true,
+          "description": "Метаданные объекта симуляции",
+          "title": "Metadata",
+          "type": "object"
+        },
+        "timeout": {
+          "default": 0.0,
+          "description": "Время выполнения процесса",
+          "minimum": 0,
+          "title": "Timeout",
+          "type": "number"
+        },
+        "capacity": {
+          "default": 1,
+          "description": "Количество параллельных потоков процесса",
+          "minimum": 1,
+          "title": "Capacity",
+          "type": "integer"
+        },
+        "input_buffers": {
+          "additionalProperties": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "description": "Входные буферы: {тип_сущности: буфер}",
+          "title": "Input Buffers",
+          "type": "object"
+        },
+        "output_buffer": {
+          "description": "Выходной буфер",
+          "format": "uuid",
+          "title": "Output Buffer",
+          "type": "string"
+        },
+        "object_type": {
+          "const": "assembly",
+          "default": "assembly",
+          "description": "Тип процесса: сборка",
+          "title": "Object Type",
+          "type": "string"
+        },
+        "specification": {
+          "additionalProperties": {
+            "type": "integer"
+          },
+          "description": "Спецификация процесса сборки {название_сущности: количество}",
+          "title": "Specification",
+          "type": "object"
+        }
+      },
+      "required": [
+        "name",
+        "input_buffers",
+        "output_buffer",
+        "specification"
+      ],
+      "title": "AssemblyProcessConfig",
+      "type": "object"
+    },
+    "BulkBufferConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "description": "ID объекта симуляции",
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "description": "Имя объекта симуляции",
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "metadata": {
+          "additionalProperties": true,
+          "description": "Метаданные объекта симуляции",
+          "title": "Metadata",
+          "type": "object"
+        },
+        "object_type": {
+          "const": "bulk_buffer",
+          "default": "bulk_buffer",
+          "description": "Тип буфера: непрерывный",
+          "title": "Object Type",
+          "type": "string"
+        },
+        "capacity": {
+          "description": "Вместимость буфера",
+          "exclusiveMinimum": 0,
+          "title": "Capacity",
+          "type": "number"
+        },
+        "initial_level": {
+          "default": 0.0,
+          "description": "Начальный уровень заполнения буфера",
+          "minimum": 0.0,
+          "title": "Initial Level",
+          "type": "number"
+        }
+      },
+      "required": [
+        "name",
+        "capacity"
+      ],
+      "title": "BulkBufferConfig",
+      "type": "object"
+    },
+    "BulkSimpleProcessConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "description": "ID объекта симуляции",
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "description": "Имя объекта симуляции",
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "metadata": {
+          "additionalProperties": true,
+          "description": "Метаданные объекта симуляции",
+          "title": "Metadata",
+          "type": "object"
+        },
+        "timeout": {
+          "default": 0.0,
+          "description": "Время выполнения процесса",
+          "minimum": 0,
+          "title": "Timeout",
+          "type": "number"
+        },
+        "capacity": {
+          "default": 1,
+          "description": "Количество параллельных потоков процесса",
+          "minimum": 1,
+          "title": "Capacity",
+          "type": "integer"
+        },
+        "input_buffer": {
+          "description": "Входной буфер",
+          "format": "uuid",
+          "title": "Input Buffer",
+          "type": "string"
+        },
+        "output_buffer": {
+          "description": "Выходной буфер",
+          "format": "uuid",
+          "title": "Output Buffer",
+          "type": "string"
+        },
+        "object_type": {
+          "const": "bulk_process",
+          "default": "bulk_process",
+          "description": "Тип процесса: простой с непрерывными сущностями",
+          "title": "Object Type",
+          "type": "string"
+        },
+        "batch_size": {
+          "default": 1.0,
+          "description": "Размер партии сущностей для обработки процессом",
+          "exclusiveMinimum": 0,
+          "title": "Batch Size",
+          "type": "number"
+        }
+      },
+      "required": [
+        "name",
+        "input_buffer",
+        "output_buffer"
+      ],
+      "title": "BulkSimpleProcessConfig",
+      "type": "object"
+    },
+    "BulkSinkConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "description": "ID объекта симуляции",
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "description": "Имя объекта симуляции",
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "metadata": {
+          "additionalProperties": true,
+          "description": "Метаданные объекта симуляции",
+          "title": "Metadata",
+          "type": "object"
+        },
+        "timeout": {
+          "default": 0.0,
+          "description": "Время выполнения процесса",
+          "minimum": 0,
+          "title": "Timeout",
+          "type": "number"
+        },
+        "capacity": {
+          "default": 1,
+          "description": "Количество параллельных потоков процесса",
+          "minimum": 1,
+          "title": "Capacity",
+          "type": "integer"
+        },
+        "object_type": {
+          "const": "bulk_sink",
+          "default": "bulk_sink",
+          "description": "Тип процесса: поглотитель непрерывных сущностей",
+          "title": "Object Type",
+          "type": "string"
+        },
+        "input_buffer": {
+          "description": "Входной буфер поглотителя сущностей",
+          "format": "uuid",
+          "title": "Input Buffer",
+          "type": "string"
+        },
+        "batch_size": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Размер партии поглощаемых сущностей. None - поглощение всей емкости входного буфера",
+          "title": "Batch Size"
+        }
+      },
+      "required": [
+        "name",
+        "input_buffer"
+      ],
+      "title": "BulkSinkConfig",
+      "type": "object"
+    },
+    "BulkSourceConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "description": "ID объекта симуляции",
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "description": "Имя объекта симуляции",
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "metadata": {
+          "additionalProperties": true,
+          "description": "Метаданные объекта симуляции",
+          "title": "Metadata",
+          "type": "object"
+        },
+        "timeout": {
+          "default": 0.0,
+          "description": "Время выполнения процесса",
+          "minimum": 0,
+          "title": "Timeout",
+          "type": "number"
+        },
+        "capacity": {
+          "default": 1,
+          "description": "Количество параллельных потоков процесса",
+          "minimum": 1,
+          "title": "Capacity",
+          "type": "integer"
+        },
+        "object_type": {
+          "const": "bulk_source",
+          "default": "bulk_source",
+          "description": "Тип процесса: источник непрерывных сущностей",
+          "title": "Object Type",
+          "type": "string"
+        },
+        "output_buffer": {
+          "description": "Выходной буфер источника сущностей",
+          "format": "uuid",
+          "title": "Output Buffer",
+          "type": "string"
+        },
+        "batch_size": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Размер партии генерируемых сущностей. None - заполнение всей емкости входного буфера",
+          "title": "Batch Size"
+        }
+      },
+      "required": [
+        "name",
+        "output_buffer"
+      ],
+      "title": "BulkSourceConfig",
+      "type": "object"
+    },
+    "DiscreteBufferConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "description": "ID объекта симуляции",
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "description": "Имя объекта симуляции",
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "metadata": {
+          "additionalProperties": true,
+          "description": "Метаданные объекта симуляции",
+          "title": "Metadata",
+          "type": "object"
+        },
+        "object_type": {
+          "const": "discrete_buffer",
+          "default": "discrete_buffer",
+          "description": "Тип буфера: дискретный",
+          "title": "Object Type",
+          "type": "string"
+        },
+        "capacity": {
+          "description": "Вместимость буфера",
+          "minimum": 1,
+          "title": "Capacity",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "name",
+        "capacity"
+      ],
+      "title": "DiscreteBufferConfig",
+      "type": "object"
+    },
+    "DiscreteSimpleProcessConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "description": "ID объекта симуляции",
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "description": "Имя объекта симуляции",
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "metadata": {
+          "additionalProperties": true,
+          "description": "Метаданные объекта симуляции",
+          "title": "Metadata",
+          "type": "object"
+        },
+        "timeout": {
+          "default": 0.0,
+          "description": "Время выполнения процесса",
+          "minimum": 0,
+          "title": "Timeout",
+          "type": "number"
+        },
+        "capacity": {
+          "default": 1,
+          "description": "Количество параллельных потоков процесса",
+          "minimum": 1,
+          "title": "Capacity",
+          "type": "integer"
+        },
+        "input_buffer": {
+          "description": "Входной буфер",
+          "format": "uuid",
+          "title": "Input Buffer",
+          "type": "string"
+        },
+        "output_buffer": {
+          "description": "Выходной буфер",
+          "format": "uuid",
+          "title": "Output Buffer",
+          "type": "string"
+        },
+        "object_type": {
+          "const": "discrete_process",
+          "default": "discrete_process",
+          "description": "Тип процесса: простой с дискретными объектами",
+          "title": "Object Type",
+          "type": "string"
+        },
+        "batch_size": {
+          "default": 1,
+          "description": "Размер партии сущностей для обработки процессом",
+          "minimum": 1,
+          "title": "Batch Size",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "name",
+        "input_buffer",
+        "output_buffer"
+      ],
+      "title": "DiscreteSimpleProcessConfig",
+      "type": "object"
+    },
+    "DiscreteSinkConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "description": "ID объекта симуляции",
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "description": "Имя объекта симуляции",
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "metadata": {
+          "additionalProperties": true,
+          "description": "Метаданные объекта симуляции",
+          "title": "Metadata",
+          "type": "object"
+        },
+        "timeout": {
+          "default": 0.0,
+          "description": "Время выполнения процесса",
+          "minimum": 0,
+          "title": "Timeout",
+          "type": "number"
+        },
+        "capacity": {
+          "default": 1,
+          "description": "Количество параллельных потоков процесса",
+          "minimum": 1,
+          "title": "Capacity",
+          "type": "integer"
+        },
+        "object_type": {
+          "const": "discrete_sink",
+          "default": "discrete_sink",
+          "description": "Тип процесса: поглотитель дискретных сущностей",
+          "title": "Object Type",
+          "type": "string"
+        },
+        "input_buffer": {
+          "description": "Входной буфер поглотителя сущностей",
+          "format": "uuid",
+          "title": "Input Buffer",
+          "type": "string"
+        },
+        "batch_size": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Размер партии поглощаемых сущностей. None - поглощение всей емкости входного буфера",
+          "title": "Batch Size"
+        }
+      },
+      "required": [
+        "name",
+        "input_buffer"
+      ],
+      "title": "DiscreteSinkConfig",
+      "type": "object"
+    },
+    "DiscreteSourceConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "description": "ID объекта симуляции",
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "description": "Имя объекта симуляции",
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "metadata": {
+          "additionalProperties": true,
+          "description": "Метаданные объекта симуляции",
+          "title": "Metadata",
+          "type": "object"
+        },
+        "timeout": {
+          "default": 0.0,
+          "description": "Время выполнения процесса",
+          "minimum": 0,
+          "title": "Timeout",
+          "type": "number"
+        },
+        "capacity": {
+          "default": 1,
+          "description": "Количество параллельных потоков процесса",
+          "minimum": 1,
+          "title": "Capacity",
+          "type": "integer"
+        },
+        "object_type": {
+          "const": "discrete_source",
+          "default": "discrete_source",
+          "description": "Тип процесса: источник дискретных сущностей",
+          "title": "Object Type",
+          "type": "string"
+        },
+        "output_buffer": {
+          "description": "Выходной буфер источника сущностей",
+          "format": "uuid",
+          "title": "Output Buffer",
+          "type": "string"
+        },
+        "batch_size": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Размер партии генерируемых сущностей. None - заполнение всей емкости входного буфера",
+          "title": "Batch Size"
+        }
+      },
+      "required": [
+        "name",
+        "output_buffer"
+      ],
+      "title": "DiscreteSourceConfig",
+      "type": "object"
+    },
+    "MixingProcessConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "description": "ID объекта симуляции",
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "description": "Имя объекта симуляции",
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "metadata": {
+          "additionalProperties": true,
+          "description": "Метаданные объекта симуляции",
+          "title": "Metadata",
+          "type": "object"
+        },
+        "timeout": {
+          "default": 0.0,
+          "description": "Время выполнения процесса",
+          "minimum": 0,
+          "title": "Timeout",
+          "type": "number"
+        },
+        "capacity": {
+          "default": 1,
+          "description": "Количество параллельных потоков процесса",
+          "minimum": 1,
+          "title": "Capacity",
+          "type": "integer"
+        },
+        "input_buffers": {
+          "additionalProperties": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "description": "Входные буферы: {тип_сущности: буфер}",
+          "title": "Input Buffers",
+          "type": "object"
+        },
+        "output_buffer": {
+          "description": "Выходной буфер",
+          "format": "uuid",
+          "title": "Output Buffer",
+          "type": "string"
+        },
+        "object_type": {
+          "const": "mixing",
+          "default": "mixing",
+          "description": "Тип процесса: смешивание",
+          "title": "Object Type",
+          "type": "string"
+        },
+        "specification": {
+          "additionalProperties": {
+            "type": "number"
+          },
+          "description": "Спецификация процесса смешивания {название_ресурса: количество}",
+          "title": "Specification",
+          "type": "object"
+        }
+      },
+      "required": [
+        "name",
+        "input_buffers",
+        "output_buffer",
+        "specification"
+      ],
+      "title": "MixingProcessConfig",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "description": "ID объекта симуляции",
+      "format": "uuid",
+      "title": "Id",
+      "type": "string"
+    },
+    "name": {
+      "description": "Имя объекта симуляции",
+      "maxLength": 100,
+      "minLength": 1,
+      "title": "Name",
+      "type": "string"
+    },
+    "metadata": {
+      "additionalProperties": true,
+      "description": "Метаданные объекта симуляции",
+      "title": "Metadata",
+      "type": "object"
+    },
+    "duration": {
+      "description": "Длительность симуляции",
+      "exclusiveMinimum": 0,
+      "title": "Duration",
+      "type": "number"
+    },
+    "buffers": {
+      "description": "Список конфигурации буферов системы",
+      "items": {
+        "discriminator": {
+          "mapping": {
+            "bulk_buffer": "#/$defs/BulkBufferConfig",
+            "discrete_buffer": "#/$defs/DiscreteBufferConfig"
+          },
+          "propertyName": "object_type"
+        },
+        "oneOf": [
+          {
+            "$ref": "#/$defs/BulkBufferConfig"
+          },
+          {
+            "$ref": "#/$defs/DiscreteBufferConfig"
+          }
+        ]
+      },
+      "title": "Buffers",
+      "type": "array"
+    },
+    "processes": {
+      "description": "Список конфигурации процессов системы",
+      "items": {
+        "discriminator": {
+          "mapping": {
+            "assembly": "#/$defs/AssemblyProcessConfig",
+            "bulk_process": "#/$defs/BulkSimpleProcessConfig",
+            "bulk_sink": "#/$defs/BulkSinkConfig",
+            "bulk_source": "#/$defs/BulkSourceConfig",
+            "discrete_process": "#/$defs/DiscreteSimpleProcessConfig",
+            "discrete_sink": "#/$defs/DiscreteSinkConfig",
+            "discrete_source": "#/$defs/DiscreteSourceConfig",
+            "mixing": "#/$defs/MixingProcessConfig"
+          },
+          "propertyName": "object_type"
+        },
+        "oneOf": [
+          {
+            "$ref": "#/$defs/BulkSourceConfig"
+          },
+          {
+            "$ref": "#/$defs/DiscreteSourceConfig"
+          },
+          {
+            "$ref": "#/$defs/BulkSimpleProcessConfig"
+          },
+          {
+            "$ref": "#/$defs/DiscreteSimpleProcessConfig"
+          },
+          {
+            "$ref": "#/$defs/MixingProcessConfig"
+          },
+          {
+            "$ref": "#/$defs/AssemblyProcessConfig"
+          },
+          {
+            "$ref": "#/$defs/BulkSinkConfig"
+          },
+          {
+            "$ref": "#/$defs/DiscreteSinkConfig"
+          }
+        ]
+      },
+      "title": "Processes",
+      "type": "array"
+    }
+  },
+  "required": [
+    "name",
+    "duration"
+  ],
+  "title": "SimulationConfig",
+  "type": "object"
+}

@@ -1,0 +1,92 @@
+{
+  "name": "Симуляция приготовления теста",
+  "duration": 33.0,
+  "buffers": [
+    {
+      "id": "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c01",
+      "name": "Буфер муки",
+      "object_type": "bulk_buffer",
+      "capacity": 50.0,
+      "initial_level": 0.0
+    },
+    {
+      "id": "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c02",
+      "name": "Буфер соли",
+      "object_type": "bulk_buffer",
+      "capacity": 5.0,
+      "initial_level": 0.0
+    },
+    {
+      "id": "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c03",
+      "name": "Буфер смеси",
+      "object_type": "bulk_buffer",
+      "capacity": 55.0,
+      "initial_level": 0.0
+    },
+    {
+      "id": "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c04",
+      "name": "Буфер отдыха",
+      "object_type": "bulk_buffer",
+      "capacity": 55.0,
+      "initial_level": 0.0
+    },
+    {
+      "id": "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c05",
+      "name": "Буфер раскатанного теста",
+      "object_type": "bulk_buffer",
+      "capacity": 55.0,
+      "initial_level": 0.0
+    }
+  ],
+  "processes": [
+    {
+      "id": "b1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c01",
+      "name": "Источник муки",
+      "object_type": "bulk_source",
+      "output_buffer": "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c01",
+      "batch_size": 50.0,
+      "timeout": 2.0
+    },
+    {
+      "id": "b1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c02",
+      "name": "Источник соли",
+      "object_type": "bulk_source",
+      "output_buffer": "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c02",
+      "batch_size": 5.0,
+      "timeout": 2.0
+    },
+    {
+      "id": "b1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c03",
+      "name": "Смешивание",
+      "object_type": "mixing",
+      "input_buffers": {
+        "flour": "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c01",
+        "salt": "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c02"
+      },
+      "output_buffer": "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c03",
+      "specification": {
+        "flour": 50.0,
+        "salt": 5.0
+      },
+      "timeout": 10.0
+    },
+    {
+      "id": "b1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c04",
+      "name": "Процесс отдыха",
+      "object_type": "bulk_process",
+      "input_buffer": "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c03",
+      "output_buffer": "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c04",
+      "batch_size": 55.0,
+      "timeout": 15.0
+    },
+    {
+      "id": "b1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c05",
+      "name": "Процесс раскатки",
+      "object_type": "bulk_process",
+      "input_buffer": "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c04",
+      "output_buffer": "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c05",
+      "batch_size": 55.0,
+      "timeout": 5.0
+    }
+  ]
+}

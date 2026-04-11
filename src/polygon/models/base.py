@@ -1,4 +1,4 @@
-from typing import Any, Dict
+from typing import Any
 from uuid import UUID, uuid4
 from pydantic import BaseModel, Field, ConfigDict
 
@@ -8,19 +8,21 @@ class BaseConfig(BaseModel):
         default_factory=uuid4,
         description="ID объекта симуляции"
     )
+
     name: str = Field(
         ...,
-        min_length=3,
+        min_length=1,
         max_length=100,
         description="Имя объекта симуляции"
     )
-    metadata: Dict[str, Any] = Field(
+
+    metadata: dict[str, Any] = Field(
         default_factory=dict,
         description="Метаданные объекта симуляции"
     )
 
     model_config = ConfigDict(
-        frozen=True,  # Делаем конфигурацию иммутабельной
-        extra="forbid",  # Запрещает не объявленные поля
-        str_strip_whitespace=True, # Убираем лишние пробелы по краям строк
+        frozen=True,
+        extra="forbid",
+        str_strip_whitespace=True,
     )

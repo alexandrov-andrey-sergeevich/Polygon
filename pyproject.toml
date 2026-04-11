@@ -5,6 +5,7 @@ authors = "Alexandrov Andrey Sergeevich"
 description = "Add your description here"
 requires-python = ">=3.13"
 dependencies = [
+    "jsonschema>=4.26.0",
     "pydantic>=2.12.4",
     "simpy>=4.1.1",
 ]
